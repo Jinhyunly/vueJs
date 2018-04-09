@@ -26,7 +26,8 @@ new Vue({
         resetForm(){
             this.query = '' //this => vue instance
             // todo 검색결과를 숨기는..
-            debugger
+            this.submitted = false
+            this.searchResult = []
         }
     }
 })
