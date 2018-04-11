@@ -24,7 +24,8 @@ new Vue({
         this.fetchHistory()
     },
     methods: {
-        onSubmit(e){
+        onSubmit(query){ //query 는 inputValue 값이다
+            this.query = query
             this.search()
         },
         onKeyup(e){
