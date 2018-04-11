@@ -5,6 +5,23 @@
     </header>
     <div class="container">
       <search-form v-bind:value="query" v-on:@submit="onSubmit" v-on:@reset="onReset"></search-form>
+     
+      <div class="content">
+          <div v-if="submitted">
+            <search-result v-bind:data="searchResult" v-bind:query="query"></search-result>
+          </div>
+          <div v-else>
+            
+            <tabs v-bind:tabs="tabs" v-bind:selected-tab="selectedTab" v-on:@change="onClickTab"></tabs> 
+            
+            <div v-if="selectedTab === tabs[0]">
+              <list v-bind:data="keywords" type="keyword" v-on:@click="onClickKeyword"></list>
+            </div>
+            <div v-else>
+              <list v-bind:data="history" type="history" v-on:@click="onClickKeyword" v-on:@remove="onClickRemoveHistory"></list>
+            </div>
+          </div>
+      </div>
     </div>
   </div>
 </template>
@@ -15,7 +32,9 @@ import KeywordModel from './models/KeywordModel.js'
 import HistoryModel from './models/HistoryModel.js'
 
 import FormComponent from './components/FormComponent.vue'
-
+import ResultComponent from './components/ResultComponent.vue'
+import ListComponent from './components/ListComponent.vue'
+import TabComponent from './components/TabComponent.vue'
 export default {
   name: 'app',
   data () {
@@ -30,7 +49,15 @@ export default {
     }
   },
   components: {
-    'search-form': FormComponent
+    'search-form': FormComponent,
+    'search-result' : ResultComponent,
+    'list' : ListComponent,
+    'tabs' : TabComponent
+  },
+  created() {
+      this.selectedTab = this.tabs[0]
+      this.fetchKeyword()
+      this.fetchHistory()
   },
   methods: {
     onSubmit(query){ //query 는 inputValue 값이다
